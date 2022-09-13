@@ -11,6 +11,15 @@ EmployeesController empCtrl = new(_context);
 CustomerController custCtrl = new(_context);
 
 
+
+/*
+var customer = await custCtrl.GetByPk("ALFKI");
+
+Print(customer?.ToString() ?? "Customer not found.");
+//if customer not null; call to string. If is null, return string printed instead.
+*/
+
+/*
 var cust = custCtrl.GetByPk("ANTON");
 
 Print(cust);
@@ -20,7 +29,7 @@ Customer[] custs = custCtrl.GetAll().ToArray();
 foreach(Customer cst in custs) {
     Print(cst);
 }
-
+*/
 /*
 Customer? x5 = custCtrl.GetByPk("MICRO");
 

@@ -1,4 +1,5 @@
 ﻿using LINQefNWLibrary.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,39 +15,39 @@ namespace LINQefNWLibrary.Controllers {
             _context = context;
         }
 
-        public IEnumerable<Order> GetAll() {
-            return _context.Orders.OrderBy(o => o.OrderId);
+        public async Task<IEnumerable<Order>> GetAll() {
+            return await _context.Orders.OrderBy(o => o.OrderId).ToListAsync();
         }
 
-        public Order? GetByPk(int orderId) {
-            return _context.Orders.Find(orderId);
+        public async Task<Order?> GetByPk(int orderId) {
+            return await _context.Orders.FindAsync(orderId);
 
         }
 
-        public Order Insert(Order order) {
+        public async Task<Order> Insert(Order order) {
             if (order.OrderId != 0) {
                 throw new ArgumentException("Inserting new order requires orderId to be zero.");
             }
             _context.Orders.Add(order);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return order;
         }
-        public void Update(int orderId, Order order) {
+        public async Task Update(int orderId, Order order) {
             if (orderId != order.OrderId) {
                 throw new Exception("This customer does not exist or match; please run an Insert function instead.");
             }
             _context.Entry(order).State = Microsoft.EntityFrameworkCore.EntityState.Modified; // Gets EF to recognize there has been a change so it can be saved and updated
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return; //why didn't i need to return customer here again? Redundant.
         }
 
-        public void Delete(int orderId) {
-            Order? ord = GetByPk(orderId);
+        public async Task Delete(int orderId) {
+            Order? ord = await GetByPk(orderId);
             if (ord is null) {
                 throw new Exception("Order not found.");
             }
             _context.Orders.Remove(ord);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
